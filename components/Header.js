@@ -21,6 +21,9 @@ export default function Header() {
         <Link href="/contact">
           <a>Contact</a>
         </Link>
+        <Link href="/users">
+          <a>Users</a>
+        </Link>
       </nav>
     </header>
   );
