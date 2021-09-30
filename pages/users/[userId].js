@@ -13,11 +13,9 @@ export default function User(props) {
     getParsedCookie('following') || [],
   );
 
-  console.log(getParsedCookie('following'));
-
   function clickHandler() {
     // 1. check the current state of the cookie
-    const currentCookie = getParsedCookie('following');
+    const currentCookie = getParsedCookie('following') || [];
     // [5,7]
 
     const isUserFollowed = currentCookie.some((id) => {
