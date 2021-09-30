@@ -17,6 +17,7 @@ export default function Users(props) {
               <Link href={`/users/${user.id}`}>
                 <a>{user.name} single page</a>
               </Link>
+              <div>{user.following ? '❤️' : '🖤'}</div>
             </li>
           );
         })}
@@ -25,13 +26,29 @@ export default function Users(props) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const { users } = await import('../../util/database');
 
+  const following = JSON.parse(context.req.cookies.following);
+
+  console.log(following);
+  // [5,7]
   console.log(users);
+
+  const glorifiedUsers = users.map((user) => {
+    return {
+      ...user,
+      following: following.some((id) => {
+        return Number(user.id) === id;
+      }),
+    };
+  });
+
+  console.log(glorifiedUsers);
+
   return {
     props: {
-      users,
+      users: glorifiedUsers,
     },
   };
 }
