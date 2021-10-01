@@ -1,7 +1,15 @@
+import { css } from '@emotion/react';
 import Head from 'next/head';
 import { useState } from 'react';
 import Layout from '../components/Layout';
 import { getLocalStorage, setLocalStorage } from '../util/localStorage';
+
+const buttonDark = (darkMode) => {
+  return css`
+    background-color: ${darkMode ? 'black' : 'beige'};
+    color: ${darkMode ? 'white' : 'black'};
+  `;
+};
 
 // [4,5,6,7]
 
@@ -33,7 +41,9 @@ export default function Home() {
       </Head>
       <div>Local Storage Test</div>
       <div>dark mode : {JSON.stringify(darkMode)}</div>
-      <button onClick={clickHandler}>dark mode</button>
+      <button css={buttonDark(darkMode)} onClick={clickHandler}>
+        dark mode
+      </button>
     </Layout>
   );
 }

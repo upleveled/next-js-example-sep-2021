@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 
 export default function Contact() {
   return (
-    <Layout greeting={'Hola amigo'}>
+    <Layout greeting="Hola amigo">
       <Head>
         <title>contact</title>
       </Head>

@@ -46,7 +46,8 @@ export default function User(props) {
       );
       setClapCount(0);
     } else {
-      // add the user
+      // add the userdev
+
       newCookie = [
         ...currentCookie,
         { id: Number(props.singleUser.id), clapCount: 0 },
