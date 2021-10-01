@@ -3,6 +3,10 @@ import { useState } from 'react';
 import Layout from '../components/Layout';
 import { getLocalStorage, setLocalStorage } from '../util/localStorage';
 
+// [4,5,6,7]
+
+// [{id: 4, clapCount: 0},{id: 6, clapCount:2}]
+
 export default function Home() {
   const myDarkMode = getLocalStorage('darkMode') || false;
 
@@ -16,12 +20,14 @@ export default function Home() {
     setDarkMode(newDarkMode);
   }
 
+  const greeting = 'Hello';
+
   // 1. Local Storage is string only
   // 2. Local Storage have methods to set remove and get
   // 3. Local Storage values are independent of the browser and the domain
 
   return (
-    <Layout>
+    <Layout greeting={greeting}>
       <Head>
         <title>UpLeveled next.js</title>
       </Head>

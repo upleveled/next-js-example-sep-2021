@@ -8,10 +8,11 @@ const navStyles = css`
   color: white;
 `;
 
-export default function Header() {
+export default function Header(props) {
   return (
     <header>
       <nav css={navStyles}>
+        <div>{props.greeting}</div>
         <Link href="/">
           <a>Home</a>
         </Link>
