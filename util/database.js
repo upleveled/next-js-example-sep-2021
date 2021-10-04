@@ -7,10 +7,28 @@ import postgres from 'postgres';
 // to connect to PostgreSQL
 dotenvSafe.config();
 
-// Connect to PostgreSQL
-const sql = postgres();
+// Connect only once to the database
+// https://github.com/vercel/next.js/issues/7811#issuecomment-715259370
+function connectOneTimeToDatabase() {
+  let sql;
 
-sql`SELECT 1;`.then((result) => console.log(result));
+  if (process.env.NODE_ENV === 'production') {
+    // Heroku needs SSL connections but
+    // has an "unauthorized" certificate
+    // https://devcenter.heroku.com/changelog-items/852
+    sql = postgres({ ssl: { rejectUnauthorized: false } });
+  } else {
+    if (!globalThis.__postgresSqlClient) {
+      globalThis.__postgresSqlClient = postgres();
+    }
+    sql = globalThis.__postgresSqlClient;
+  }
+
+  return sql;
+}
+
+// Connect to PostgreSQL
+const sql = connectOneTimeToDatabase();
 
 export async function getUsers() {
   const users = await sql`
