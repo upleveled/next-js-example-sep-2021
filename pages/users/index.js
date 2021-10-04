@@ -27,7 +27,9 @@ export default function Users(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { users } = await import('../../util/database');
+  const { getUsers } = await import('../../util/database');
+
+  const users = await getUsers();
 
   const cookies = context.req.cookies.following || '[]';
   const following = JSON.parse(cookies);
