@@ -6,14 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate": "dotenv ley"
   },
   "dependencies": {
     "@emotion/babel-plugin": "^11.3.0",
     "@emotion/react": "^11.4.1",
     "camelcase-keys": "^7.0.1",
+    "dotenv-cli": "^4.0.0",
     "dotenv-safe": "^8.2.0",
     "js-cookie": "^3.0.1",
+    "ley": "^0.7.1",
     "next": "11.1.2",
     "postgres": "2.0.0-beta.10",
     "react": "17.0.2",

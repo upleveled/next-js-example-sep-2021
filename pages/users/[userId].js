@@ -87,19 +87,29 @@ export default function User(props) {
           <button onClick={clapClickHandler}>Clap me</button>
         </>
       ) : null}
+      <h2>User Courses</h2>
+      {props.courses.map((course) => {
+        return (
+          <div key={`course-${course.id}`}>
+            <strong>{course.title}</strong>: {course.description}
+          </div>
+        );
+      })}
     </Layout>
   );
 }
 
 export async function getServerSideProps(context) {
-  const { getUser } = await import('../../util/database');
+  const { getUser, getCoursesByUserId } = await import('../../util/database');
 
   const user = await getUser(context.query.userId);
+  const courses = await getCoursesByUserId(context.query.userId);
   //  { id: '6', name: 'Andrea', favoriteColor: 'purple' },
 
   return {
     props: {
       user,
+      courses,
     },
   };
 }
