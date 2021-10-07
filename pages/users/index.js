@@ -27,6 +27,7 @@ export default function Users(props) {
 }
 
 export async function getServerSideProps(context) {
+  // return { props: {} };
   const { getUsers } = await import('../../util/database');
 
   const users = await getUsers();

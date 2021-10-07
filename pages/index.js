@@ -39,7 +39,7 @@ export default function Home() {
       <Head>
         <title>UpLeveled next.js</title>
       </Head>
-      <div>Local Storage Test</div>
+      <h1 data-cy="home-page-h1">Local Storage Test</h1>
       <div>dark mode : {JSON.stringify(darkMode)}</div>
       <button css={buttonDark(darkMode)} onClick={clickHandler}>
         dark mode

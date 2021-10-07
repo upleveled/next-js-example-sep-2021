@@ -1,11 +1,11 @@
 export default function UpdateDontCopy(props) {
-  if (!props.updatedUser) return <div>User not found</div>;
+  if (!props.updatedUser) return <main>User not found</main>;
 
   return (
-    <div>
+    <main>
       User with id {props.updatedUser.id} updated:
       <pre>{JSON.stringify(props.updatedUser, null, 2)}</pre>
-    </div>
+    </main>
   );
 }
 

@@ -1,11 +1,11 @@
 export default function ReadDontCopy(props) {
-  if (!props.user) return <div>User not found</div>;
+  if (!props.user) return <main>User not found</main>;
 
   return (
-    <div>
+    <main>
       Read user with id {props.user.id}:
       <pre>{JSON.stringify(props.user, null, 2)}</pre>
-    </div>
+    </main>
   );
 }
 

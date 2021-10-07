@@ -1,7 +1,7 @@
 export default function DeleteDontCopy(props) {
-  if (!props.deletedUser) return <div>User not found</div>;
+  if (!props.deletedUser) return <main>User not found</main>;
 
-  return <div>User with id {props.deletedUser.id} deleted</div>;
+  return <main>User with id {props.deletedUser.id} deleted</main>;
 }
 
 export async function getServerSideProps(context) {

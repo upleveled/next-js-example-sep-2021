@@ -2,7 +2,12 @@ import Head from 'next/head';
 import { useState } from 'react';
 // import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import { getParsedCookie, setParsedCookie } from '../../util/cookies';
+import {
+  addOrRemoveFromFollowingArray,
+  findUserAndIncrementClapCount,
+  getParsedCookie,
+  setParsedCookie,
+} from '../../util/cookies';
 
 export default function User(props) {
   // this is to get the url query in the frontend
@@ -27,29 +32,15 @@ export default function User(props) {
 
   function followClickHandler() {
     // 1. check the current state of the cookie
-    const currentCookie = getParsedCookie('following') || [];
+    const followingArray = getParsedCookie('following') || [];
     // [5,7]
-    // [{id: 5, clapCount:13}, {id: 7, clapCount:0} ]
+    // [{id: 5, clapCount:13}, {id: 7, clapCount:0}]
 
-    const isUserFollowed = currentCookie.some(
-      (cookieObject /* number => object */) => {
-        return cookieObject.id === props.user.id; // id that comes from the URL
-      },
+    const newCookie = addOrRemoveFromFollowingArray(
+      followingArray,
+      props.user.id,
+      () => setClapCount(0),
     );
-
-    let newCookie;
-    if (isUserFollowed) {
-      // remove the user
-      newCookie = currentCookie.filter(
-        (cookieObject /* number => object */) =>
-          cookieObject.id !== props.user.id,
-      );
-      setClapCount(0);
-    } else {
-      // add the userdev
-
-      newCookie = [...currentCookie, { id: props.user.id, clapCount: 0 }];
-    }
 
     setParsedCookie('following', newCookie);
     setFollowing(newCookie);
@@ -60,13 +51,13 @@ export default function User(props) {
     // 1. get old version of the array
     const currentCookie = getParsedCookie('following') || [];
     // 2. get the object in the array
-    const cookieObjFound = currentCookie.find(
-      (cookieObj) => cookieObj.id === props.user.id,
+    const updatedUser = findUserAndIncrementClapCount(
+      currentCookie,
+      props.user.id,
     );
-    cookieObjFound.clapCount += 1;
     // 3. set the new version of the array
     setParsedCookie('following', currentCookie);
-    setClapCount(cookieObjFound.clapCount);
+    setClapCount(updatedUser.clapCount);
   }
 
   return (

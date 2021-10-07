@@ -17,7 +17,7 @@ export default function Header(props) {
           <a>Home</a>
         </Link>
         <Link href="/about">
-          <a>About</a>
+          <a data-cy="header-about-link">About</a>
         </Link>
         <Link href="/contact">
           <a>Contact</a>
