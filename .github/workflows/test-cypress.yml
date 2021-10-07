@@ -24,6 +24,8 @@ jobs:
         with:
           build: yarn migrate up
           start: yarn dev
+        # Environment variables for Ley and Next.js
+        # to be able to connect to the database
         env:
           PGHOST: localhost
           PGDATABASE: ${{ secrets.PGDATABASE }}
