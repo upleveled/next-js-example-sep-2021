@@ -8,7 +8,7 @@ describe('Navigation', () => {
     cy.get('main').should('contain', 'dark mode');
 
     // Navigate to about page
-    cy.get('[data-cy="header-about-link"]').click();
+    cy.get('[data-cy="header-about-link"]').should('be.visible').click();
 
     // Test for element and content on the about page
     cy.get('main').should(
