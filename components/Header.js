@@ -25,6 +25,9 @@ export default function Header(props) {
         <Link href="/users">
           <a>Users</a>
         </Link>
+        <Link href="/admin/users">
+          <a>Admin</a>
+        </Link>
       </nav>
     </header>
   );
