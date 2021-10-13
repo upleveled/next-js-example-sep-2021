@@ -8,7 +8,11 @@ const navStyles = css`
   color: white;
 `;
 
-export default function Header(props) {
+type Props = {
+  greeting?: string;
+};
+
+export default function Header(props: Props) {
   return (
     <header>
       <nav css={navStyles}>

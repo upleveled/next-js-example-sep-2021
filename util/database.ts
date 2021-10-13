@@ -2,10 +2,27 @@ import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
 
+export type Course = {
+  id: number;
+  title: string;
+  description: string;
+};
+
+export type User = {
+  id: number;
+  name: string;
+  favoriteColor: string;
+};
+
 // Read in the environment variables
 // in the .env file, making it possible
 // to connect to PostgreSQL
 dotenvSafe.config();
+
+declare module globalThis {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  let __postgresSqlClient: ReturnType<typeof postgres> | undefined;
+}
 
 // Connect only once to the database
 // https://github.com/vercel/next.js/issues/7811#issuecomment-715259370
@@ -33,7 +50,7 @@ function connectOneTimeToDatabase() {
 const sql = connectOneTimeToDatabase();
 
 export async function getUsers() {
-  const users = await sql`
+  const users = await sql<User[]>`
     SELECT * FROM users;
   `;
   return users.map((user) => {
@@ -42,8 +59,8 @@ export async function getUsers() {
   });
 }
 
-export async function getUser(id) {
-  const users = await sql`
+export async function getUser(id: number) {
+  const users = await sql<User[]>`
     SELECT
       *
     FROM
@@ -55,7 +72,13 @@ export async function getUser(id) {
   return camelcaseKeys(users[0]);
 }
 
-export async function createUser({ name, favoriteColor }) {
+export async function createUser({
+  name,
+  favoriteColor,
+}: {
+  name: string;
+  favoriteColor: string;
+}) {
   const users = await sql`
     INSERT INTO users
       (name, favorite_color)
@@ -69,7 +92,16 @@ export async function createUser({ name, favoriteColor }) {
   return camelcaseKeys(users[0]);
 }
 
-export async function updateUserById(id, { name, favoriteColor }) {
+export async function updateUserById(
+  id: number,
+  {
+    name,
+    favoriteColor,
+  }: {
+    name: string;
+    favoriteColor: string;
+  },
+) {
   const users = await sql`
     UPDATE
       users
@@ -86,7 +118,7 @@ export async function updateUserById(id, { name, favoriteColor }) {
   return camelcaseKeys(users[0]);
 }
 
-export async function deleteUserById(id) {
+export async function deleteUserById(id: number) {
   const users = await sql`
     DELETE FROM
       users
@@ -101,8 +133,8 @@ export async function deleteUserById(id) {
 }
 
 // Join query to get information from multiple tables
-export async function getCoursesByUserId(userId) {
-  const courses = await sql`
+export async function getCoursesByUserId(userId: number) {
+  const courses = await sql<Course[]>`
     SELECT
       courses.id,
       courses.title,

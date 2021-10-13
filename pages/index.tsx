@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Layout from '../components/Layout';
 import { getLocalStorage, setLocalStorage } from '../util/localStorage';
 
-const buttonDark = (darkMode) => {
+const buttonDark = (darkMode: boolean) => {
   return css`
     background-color: ${darkMode ? 'black' : 'beige'};
     color: ${darkMode ? 'white' : 'black'};

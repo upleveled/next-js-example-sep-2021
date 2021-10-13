@@ -1,7 +1,14 @@
+import { ReactNode } from 'react';
 import Footer from './Footer';
 import Header from './Header';
 
-export default function Layout(props) {
+type Props = {
+  greeting?: string;
+  // Only if you're using props.children
+  children: ReactNode;
+};
+
+export default function Layout(props: Props) {
   return (
     <div>
       <Header greeting={props.greeting} />

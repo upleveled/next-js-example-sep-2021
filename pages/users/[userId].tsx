@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 // import { useRouter } from 'next/router';
@@ -8,15 +9,24 @@ import {
   getParsedCookie,
   setParsedCookie,
 } from '../../util/cookies';
+import { Course, User } from '../../util/database';
 
-export default function User(props) {
+type FollowingItem = { id: number; clapCount: number };
+
+type Props = {
+  user: User;
+  courses: Course[];
+};
+
+export default function SingleUser(props: Props) {
   // this is to get the url query in the frontend
   // const router = useRouter();
   // const { user } = router.query;
 
-  const [following, setFollowing] = useState(
+  const [following, setFollowing] = useState<FollowingItem[]>(
     getParsedCookie('following') || [],
   );
+
   // [5,7]
   // [{id: 5, clapCount:13}, {id: 7, clapCount:0} ]
 
@@ -65,8 +75,11 @@ export default function User(props) {
       <Head>
         <title>single user</title>
       </Head>
+
       <div>Personal user page of {props.user.name}</div>
+
       <div>his/her favourite color is {props.user.favoriteColor}</div>
+
       <button onClick={followClickHandler}>
         {following.some((cookieObj) => props.user.id === cookieObj.id)
           ? 'unfollow'
@@ -90,11 +103,11 @@ export default function User(props) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getUser, getCoursesByUserId } = await import('../../util/database');
 
-  const user = await getUser(context.query.userId);
-  const courses = await getCoursesByUserId(context.query.userId);
+  const user = await getUser(Number(context.query.userId));
+  const courses = await getCoursesByUserId(Number(context.query.userId));
   //  { id: '6', name: 'Andrea', favoriteColor: 'purple' },
 
   return {
