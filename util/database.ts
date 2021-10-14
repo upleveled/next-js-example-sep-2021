@@ -1,6 +1,9 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
+import setPostgresDefaultsOnHeroku from './node-heroku-postgres-env-vars';
+
+setPostgresDefaultsOnHeroku();
 
 export type Course = {
   id: number;
@@ -35,14 +38,11 @@ function connectOneTimeToDatabase() {
     // https://devcenter.heroku.com/changelog-items/852
     sql = postgres({ ssl: { rejectUnauthorized: false } });
   } else {
-    // When we're in development, make sure that we connect only
-    // once to the database
     if (!globalThis.__postgresSqlClient) {
       globalThis.__postgresSqlClient = postgres();
     }
     sql = globalThis.__postgresSqlClient;
   }
-
   return sql;
 }
 
