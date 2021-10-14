@@ -1,4 +1,4 @@
-const setPostgresDefaultsOnHeroku = require('./util/node-heroku-postgres-env-vars.js');
+const setPostgresDefaultsOnHeroku = require('./util/node-heroku-postgres-env-vars');
 
 setPostgresDefaultsOnHeroku();
 
