@@ -3,9 +3,9 @@ exports.up = async function up(sql) {
     ALTER TABLE
       users
     ADD COLUMN
-      username varchar(40) UNIQUE NOT NULL,
+      username varchar(40) UNIQUE,
     ADD COLUMN
-      password_hash varchar(60) NOT NULL
+      password_hash varchar(60)
   `;
 };
 
