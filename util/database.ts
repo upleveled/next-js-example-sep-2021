@@ -10,8 +10,13 @@ export type Course = {
 
 export type User = {
   id: number;
-  name: string;
-  favoriteColor: string;
+  username: string;
+  name: string | null;
+  favoriteColor: string | null;
+};
+
+export type UserWithPasswordHash = User & {
+  passwordHash: string;
 };
 
 // Read in the environment variables
@@ -51,7 +56,13 @@ const sql = connectOneTimeToDatabase();
 
 export async function getUsers() {
   const users = await sql<User[]>`
-    SELECT * FROM users;
+    SELECT
+      id,
+      name,
+      favorite_color,
+      username
+    FROM
+      users;
   `;
   return users.map((user) => {
     // Convert the snake case favorite_color to favoriteColor
@@ -60,16 +71,34 @@ export async function getUsers() {
 }
 
 export async function getUser(id: number) {
-  const users = await sql<User[]>`
+  const [user] = await sql<[User]>`
     SELECT
-      *
+      id,
+      name,
+      favorite_color,
+      username
     FROM
       users
     WHERE
       id = ${id};
   `;
-  // We return users[0] because we only want the first user
-  return camelcaseKeys(users[0]);
+  return camelcaseKeys(user);
+}
+
+export async function getUserWithPasswordHashByUsername(username: string) {
+  const [user] = await sql<[UserWithPasswordHash | undefined]>`
+    SELECT
+      id,
+      name,
+      favorite_color,
+      username,
+      password_hash
+    FROM
+      users
+    WHERE
+      username = ${username};
+  `;
+  return user && camelcaseKeys(user);
 }
 
 export async function createUser({
@@ -90,6 +119,27 @@ export async function createUser({
       favorite_color;
   `;
   return camelcaseKeys(users[0]);
+}
+
+export async function insertUser({
+  username,
+  passwordHash,
+}: {
+  username: string;
+  passwordHash: string;
+}) {
+  const [user] = await sql<[User]>`
+    INSERT INTO users
+      (username, password_hash)
+    VALUES
+      (${username}, ${passwordHash})
+    RETURNING
+      id,
+      username,
+      name,
+      favorite_color;
+  `;
+  return camelcaseKeys(user);
 }
 
 export async function updateUserById(

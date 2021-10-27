@@ -76,7 +76,7 @@ export default function SingleUser(props: Props) {
         <title>single user</title>
       </Head>
 
-      <div>Personal user page of {props.user.name}</div>
+      <div>Personal user page of {props.user.name || props.user.username}</div>
 
       <div>his/her favourite color is {props.user.favoriteColor}</div>
 
