@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
@@ -15,7 +16,7 @@ const errorsStyles = css`
   color: red;
 `;
 
-export default function RegisterPage() {
+export default function RegisterPage(props: { refreshUsername: () => void }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
@@ -54,6 +55,8 @@ export default function RegisterPage() {
               ? router.query.returnTo
               : `/users/${registerJson.user.id}`;
 
+          props.refreshUsername();
+
           router.push(destination);
         }}
       >
@@ -83,4 +86,29 @@ export default function RegisterPage() {
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { getValidSessionByToken } = await import('../util/database');
+  const sessionToken = context.req.cookies.sessionTokenRegister;
+
+  const session = await getValidSessionByToken(sessionToken);
+
+  console.log(session);
+
+  if (session) {
+    // Redirect the user when they have a session
+    // token by returning an object with the `redirect` prop
+    // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

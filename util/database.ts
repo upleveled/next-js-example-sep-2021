@@ -2,6 +2,15 @@ import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
 
+// We don't need this anymore because
+// we're getting data from the database!
+// export const users = [
+//   { id: '4', name: 'Ines', favoriteColor: 'yellow' },
+//   { id: '5', name: 'Lucas', favoriteColor: 'blue' },
+//   { id: '6', name: 'Andrea', favoriteColor: 'purple' },
+//   { id: '7', name: 'Ingo', favoriteColor: 'black' },
+// ];
+
 export type Course = {
   id: number;
   title: string;
@@ -17,6 +26,13 @@ export type User = {
 
 export type UserWithPasswordHash = User & {
   passwordHash: string;
+};
+
+export type Session = {
+  id: number;
+  token: string;
+  userId: number;
+  expiryTimestamp: Date;
 };
 
 // Read in the environment variables
@@ -82,6 +98,7 @@ export async function getUser(id: number) {
     WHERE
       id = ${id};
   `;
+
   return camelcaseKeys(user);
 }
 
@@ -201,11 +218,55 @@ export async function getCoursesByUserId(userId: number) {
   return courses.map((course) => camelcaseKeys(course));
 }
 
-// We don't need this anymore because
-// we're getting data from the database!
-// export const users = [
-//   { id: '4', name: 'Ines', favoriteColor: 'yellow' },
-//   { id: '5', name: 'Lucas', favoriteColor: 'blue' },
-//   { id: '6', name: 'Andrea', favoriteColor: 'purple' },
-//   { id: '7', name: 'Ingo', favoriteColor: 'black' },
-// ];
+export async function createSession(token: string, userId: number) {
+  const [session] = await sql<[Session]>`
+    INSERT INTO sessions
+      (token, user_id)
+    VALUES
+      (${token}, ${userId})
+    RETURNING
+      *
+  `;
+
+  return camelcaseKeys(session);
+}
+
+export async function deleteExpiredSessions() {
+  const sessions = await sql<Session[]>`
+    DELETE FROM
+      sessions
+    WHERE
+      expiry_timestamp < NOW()
+    RETURNING *
+  `;
+
+  return sessions.map((session) => camelcaseKeys(session));
+}
+
+export async function deleteSessionByToken(token: string) {
+  const sessions = await sql<Session[]>`
+    DELETE FROM
+      sessions
+    WHERE
+      token = ${token}
+    RETURNING *
+  `;
+
+  return sessions.map((session) => camelcaseKeys(session))[0];
+}
+
+export async function getValidSessionByToken(token: string) {
+  if (!token) return undefined;
+
+  const sessions = await sql<Session[]>`
+    SELECT
+      *
+    FROM
+      sessions
+    WHERE
+      token = ${token} AND
+      expiry_timestamp > NOW()
+  `;
+
+  return sessions.map((session) => camelcaseKeys(session))[0];
+}

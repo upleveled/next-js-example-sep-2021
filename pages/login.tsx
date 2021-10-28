@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
@@ -15,7 +16,7 @@ const errorsStyles = css`
   color: red;
 `;
 
-export default function LoginPage() {
+export default function LoginPage(props: { refreshUsername: () => void }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
@@ -51,7 +52,9 @@ export default function LoginPage() {
           const destination =
             typeof router.query.returnTo === 'string' && router.query.returnTo
               ? router.query.returnTo
-              : `/users/${loginJson.user.id}`;
+              : `/`;
+
+          props.refreshUsername();
 
           router.push(destination);
         }}
@@ -82,4 +85,30 @@ export default function LoginPage() {
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { getValidSessionByToken } = await import('../util/database');
+
+  const sessionToken = context.req.cookies.sessionTokenRegister;
+
+  const session = await getValidSessionByToken(sessionToken);
+
+  console.log(session);
+
+  if (session) {
+    // Redirect the user when they have a session
+    // token by returning an object with the `redirect` prop
+    // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

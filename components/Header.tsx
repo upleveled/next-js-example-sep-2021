@@ -9,14 +9,14 @@ const navStyles = css`
 `;
 
 type Props = {
-  greeting?: string;
+  username?: string;
 };
 
 export default function Header(props: Props) {
   return (
     <header>
       <nav css={navStyles}>
-        <div>{props.greeting}</div>
+        <div>{props.username}</div>
         <Link href="/">
           <a>Home</a>
         </Link>

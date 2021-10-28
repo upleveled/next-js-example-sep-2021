@@ -15,7 +15,7 @@ const buttonDark = (darkMode: boolean) => {
 
 // [{id: 4, clapCount: 0},{id: 6, clapCount:2}]
 
-export default function Home() {
+export default function Home(props: { username: string | undefined }) {
   const myDarkMode = getLocalStorage('darkMode') || false;
 
   const [darkMode, setDarkMode] = useState(myDarkMode);
@@ -28,14 +28,12 @@ export default function Home() {
     setDarkMode(newDarkMode);
   }
 
-  const greeting = 'Hello';
-
   // 1. Local Storage is string only
   // 2. Local Storage have methods to set remove and get
   // 3. Local Storage values are independent of the browser and the domain
 
   return (
-    <Layout greeting={greeting}>
+    <Layout username={props.username || 'not logged'}>
       <Head>
         <title>UpLeveled next.js</title>
       </Head>
