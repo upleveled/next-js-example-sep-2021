@@ -40,6 +40,7 @@ export type Session = {
 // to connect to PostgreSQL
 dotenvSafe.config();
 
+// Type needed for the connection function below
 declare module globalThis {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   let __postgresSqlClient: ReturnType<typeof postgres> | undefined;
