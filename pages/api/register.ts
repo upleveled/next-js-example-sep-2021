@@ -59,6 +59,11 @@ export default async function registerHandler(
     // clean old sessions
     deleteExpiredSessions();
 
+    if (!user) {
+      res.status(500).send({ errors: [{ message: 'User not create' }] });
+      return;
+    }
+
     // Create the record in the sessions table with a new token
 
     // 1. create the token

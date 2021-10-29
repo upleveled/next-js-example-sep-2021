@@ -164,7 +164,7 @@ export async function insertUser({
   username: string;
   passwordHash: string;
 }) {
-  const [user] = await sql<[User]>`
+  const [user] = await sql<[User | undefined]>`
     INSERT INTO users
       (username, password_hash)
     VALUES
@@ -175,7 +175,7 @@ export async function insertUser({
       name,
       favorite_color;
   `;
-  return camelcaseKeys(user);
+  return user && camelcaseKeys(user);
 }
 
 export async function updateUserById(
