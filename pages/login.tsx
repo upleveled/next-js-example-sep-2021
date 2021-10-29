@@ -90,6 +90,20 @@ export default function LoginPage(props: { refreshUsername: () => void }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getValidSessionByToken } = await import('../util/database');
 
+  // Redirect from HTTP to HTTPS on Heroku
+  if (
+    context.req.headers.host &&
+    context.req.headers['x-forwarded-proto'] &&
+    context.req.headers['x-forwarded-proto'] !== 'https'
+  ) {
+    return {
+      redirect: {
+        destination: `https://${context.req.headers.host}/login`,
+        permanent: true,
+      },
+    };
+  }
+
   const sessionToken = context.req.cookies.sessionToken;
 
   const session = await getValidSessionByToken(sessionToken);

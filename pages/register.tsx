@@ -16,7 +16,9 @@ const errorsStyles = css`
   color: red;
 `;
 
-export default function RegisterPage(props: { refreshUsername: () => void }) {
+type Props = { refreshUsername: () => void; csrfToken: string };
+
+export default function RegisterPage(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>([]);
@@ -39,6 +41,7 @@ export default function RegisterPage(props: { refreshUsername: () => void }) {
             body: JSON.stringify({
               username: username,
               password: password,
+              csrfToken: props.csrfToken,
             }),
           });
 
@@ -90,6 +93,22 @@ export default function RegisterPage(props: { refreshUsername: () => void }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getValidSessionByToken } = await import('../util/database');
+  const { createToken } = await import('../util/csrf');
+
+  // Redirect from HTTP to HTTPS on Heroku
+  if (
+    context.req.headers.host &&
+    context.req.headers['x-forwarded-proto'] &&
+    context.req.headers['x-forwarded-proto'] !== 'https'
+  ) {
+    return {
+      redirect: {
+        destination: `https://${context.req.headers.host}/register`,
+        permanent: true,
+      },
+    };
+  }
+
   const sessionToken = context.req.cookies.sessionToken;
 
   const session = await getValidSessionByToken(sessionToken);
@@ -109,6 +128,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: {},
+    props: {
+      csrfToken: createToken(),
+    },
   };
 }

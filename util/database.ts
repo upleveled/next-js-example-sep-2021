@@ -118,6 +118,25 @@ export async function getUserWithPasswordHashByUsername(username: string) {
   return user && camelcaseKeys(user);
 }
 
+export async function getUserBySessionToken(sessionToken: string | undefined) {
+  if (!sessionToken) return undefined;
+
+  const [user] = await sql<[User | undefined]>`
+    SELECT
+      users.id,
+      users.name,
+      users.favorite_color,
+      users.username
+    FROM
+      sessions,
+      users
+    WHERE
+      sessions.token = ${sessionToken} AND
+      sessions.user_id = users.id
+  `;
+  return user && camelcaseKeys(user);
+}
+
 export async function createUser({
   name,
   favoriteColor,
@@ -201,6 +220,40 @@ export async function deleteUserById(id: number) {
 
 // Join query to get information from multiple tables
 export async function getCoursesByUserId(userId: number) {
+  const courses = await sql<Course[]>`
+    SELECT
+      courses.id,
+      courses.title,
+      courses.description
+    FROM
+      users,
+      users_courses,
+      courses
+    WHERE
+      users.id = ${userId} AND
+      users_courses.user_id = users.id AND
+      courses.id = users_courses.course_id;
+  `;
+  return courses.map((course) => camelcaseKeys(course));
+}
+
+// Example of secure database function
+export async function getCoursesByUserIdAndSessionToken(
+  userId: number,
+  sessionToken: string | undefined,
+) {
+  if (!sessionToken) return [];
+
+  // Call another database function and then return early in case
+  // the session doesn't exist
+  //
+  // This could be adapted for usage with an "admin" type role
+  const session = await getValidSessionByToken(sessionToken);
+
+  if (!session) {
+    return [];
+  }
+
   const courses = await sql<Course[]>`
     SELECT
       courses.id,

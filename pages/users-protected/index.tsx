@@ -23,7 +23,7 @@ export default function Users(props: Props) {
             return (
               <li key={`user-li-${user.id}`}>
                 {user.name}:
-                <Link href={`/users/${user.id}`}>
+                <Link href={`/users-protected/${user.id}`}>
                   <a>{user.name} single page</a>
                 </Link>
                 <div>{user.following ? '❤️' : '🖤'}</div>
@@ -36,16 +36,9 @@ export default function Users(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  // return {
-  //   redirect: {
-  //     destination: '/login?returnTo=/users-protected',
-  //     permanent: false,
-  //   },
-  // };
-  // const response = await fetch(`${process.env.BASE_URL}/api/sessions`);
-  // const sessionsJson = await response.json();
   const { getValidSessionByToken } = await import('../../util/database');
 
+  // Authorization: Allow only logged-in users
   const isValidSession = await getValidSessionByToken(
     context.req.cookies.sessionToken,
   );
