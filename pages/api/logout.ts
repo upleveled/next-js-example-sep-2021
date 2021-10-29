@@ -6,16 +6,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
-    const { token } = JSON.parse(req.body);
+  if (req.method === 'GET') {
+    if (req.cookies.sessionToken) {
+      await deleteSessionByToken(req.cookies.sessionToken);
 
-    // delete the session
-    if (token) {
-      await deleteSessionByToken(token);
-
-      return res.status(200).end();
+      return res.status(200).send({});
     }
   }
 
-  return res.status(405);
+  return res.status(405).send({});
 }

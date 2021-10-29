@@ -218,6 +218,22 @@ export async function getCoursesByUserId(userId: number) {
   return courses.map((course) => camelcaseKeys(course));
 }
 
+export async function getValidSessionByToken(token: string) {
+  if (!token) return undefined;
+
+  const [session] = await sql<[Session | undefined]>`
+    SELECT
+      *
+    FROM
+      sessions
+    WHERE
+      token = ${token} AND
+      expiry_timestamp > NOW()
+  `;
+
+  return session && camelcaseKeys(session);
+}
+
 export async function createSession(token: string, userId: number) {
   const [session] = await sql<[Session]>`
     INSERT INTO sessions
@@ -250,22 +266,6 @@ export async function deleteSessionByToken(token: string) {
     WHERE
       token = ${token}
     RETURNING *
-  `;
-
-  return sessions.map((session) => camelcaseKeys(session))[0];
-}
-
-export async function getValidSessionByToken(token: string) {
-  if (!token) return undefined;
-
-  const sessions = await sql<Session[]>`
-    SELECT
-      *
-    FROM
-      sessions
-    WHERE
-      token = ${token} AND
-      expiry_timestamp > NOW()
   `;
 
   return sessions.map((session) => camelcaseKeys(session))[0];

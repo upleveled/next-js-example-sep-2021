@@ -35,6 +35,9 @@ export default function Header(props: Props) {
         <Link href="/users">
           <a>Users</a>
         </Link>
+        <Link href="/users-protected">
+          <a>Users Protected</a>
+        </Link>
         <Link href="/admin/users">
           <a>Admin</a>
         </Link>

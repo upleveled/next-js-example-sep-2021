@@ -2,7 +2,7 @@ import { css, Global } from '@emotion/react';
 import Head from 'next/head';
 import { useCallback, useEffect, useState } from 'react';
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   const [username, setUsername] = useState();
 
   const refreshUsername = useCallback(async () => {
@@ -47,5 +47,3 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-export default MyApp;
