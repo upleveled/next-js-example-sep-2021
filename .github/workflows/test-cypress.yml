@@ -32,6 +32,7 @@ jobs:
           PGUSERNAME: ${{ secrets.PGUSERNAME }}
           PGPASSWORD: ${{ secrets.PGPASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
+          CSRF_SECRET: ${{ secrets.CSRF_SECRET }}
       # Store any Cypress screenshots on test failure
       - uses: actions/upload-artifact@v2
         if: failure()
