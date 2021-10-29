@@ -71,7 +71,7 @@ export default async function loginHandler(
     // to the user
     const { passwordHash, ...user } = userWithPasswordHash;
 
-    res.status(200).setHeader('set-Cookie', cookie).send({ user: user });
+    res.status(200).setHeader('Set-Cookie', cookie).send({ user: user });
   } catch (err) {
     res.status(500).send({ errors: [{ message: (err as Error).message }] });
   }

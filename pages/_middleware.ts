@@ -5,7 +5,7 @@ export async function middleware(req: NextRequest) {
   console.log(req.nextUrl.pathname === '/logout');
   if (req.nextUrl.pathname === '/logout') {
     // delete the session with the session in the cookie
-    const sessionToken = req.cookies.sessionTokenRegister;
+    const sessionToken = req.cookies.sessionToken;
 
     if (sessionToken) {
       // fetch an api route called logout
@@ -14,14 +14,10 @@ export async function middleware(req: NextRequest) {
         body: JSON.stringify({ token: sessionToken }),
       });
 
-      return NextResponse.redirect('/', 302).cookie(
-        'sessionTokenRegister',
-        '',
-        {
-          maxAge: -1,
-          path: '/',
-        },
-      );
+      return NextResponse.redirect('/', 302).cookie('sessionToken', '', {
+        maxAge: -1,
+        path: '/',
+      });
     }
   }
 }

@@ -6,7 +6,7 @@ import jace from '../public/images/jace.png';
 
 export default function About(props: { username: string | undefined }) {
   return (
-    <Layout username={props.username || 'not logged'}>
+    <Layout username={props.username}>
       <Head>
         <title>about</title>
       </Head>
@@ -20,7 +20,7 @@ export default function About(props: { username: string | undefined }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getValidSessionByToken } = await import('../util/database');
 
-  const sessionToken = context.req.cookies.sessionTokenRegister;
+  const sessionToken = context.req.cookies.sessionToken;
 
   const session = await getValidSessionByToken(sessionToken);
 

@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse<RegisterResponse>,
 ) {
   if (req.method === 'GET') {
-    const token = req.cookies.sessionTokenRegister;
+    const token = req.cookies.sessionToken;
     const session = await getValidSessionByToken(token);
 
     if (!session) {

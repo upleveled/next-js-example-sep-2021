@@ -16,7 +16,13 @@ export default function Header(props: Props) {
   return (
     <header>
       <nav css={navStyles}>
-        <div>{props.username}</div>
+        <div>
+          {props.username ? (
+            <>Logged in as {props.username} &nbsp;&nbsp;&nbsp;</>
+          ) : (
+            'Not logged in'
+          )}
+        </div>
         <Link href="/">
           <a>Home</a>
         </Link>
@@ -32,6 +38,17 @@ export default function Header(props: Props) {
         <Link href="/admin/users">
           <a>Admin</a>
         </Link>
+        {!props.username && (
+          <>
+            <Link href="/register">
+              <a>Register</a>
+            </Link>
+            <Link href="/login">
+              <a>Login</a>
+            </Link>
+          </>
+        )}
+        {props.username && <a href="/logout">Logout</a>}
       </nav>
     </header>
   );

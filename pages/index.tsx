@@ -33,7 +33,7 @@ export default function Home(props: { username: string | undefined }) {
   // 3. Local Storage values are independent of the browser and the domain
 
   return (
-    <Layout username={props.username || 'not logged'}>
+    <Layout username={props.username}>
       <Head>
         <title>UpLeveled next.js</title>
       </Head>

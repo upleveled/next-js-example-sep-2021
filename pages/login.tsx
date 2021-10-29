@@ -90,7 +90,7 @@ export default function LoginPage(props: { refreshUsername: () => void }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getValidSessionByToken } = await import('../util/database');
 
-  const sessionToken = context.req.cookies.sessionTokenRegister;
+  const sessionToken = context.req.cookies.sessionToken;
 
   const session = await getValidSessionByToken(sessionToken);
 
