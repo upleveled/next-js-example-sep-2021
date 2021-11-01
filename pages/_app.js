@@ -19,7 +19,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     refreshUsername();
-  }, []);
+  }, [refreshUsername]);
 
   return (
     <>

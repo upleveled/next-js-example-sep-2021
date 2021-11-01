@@ -54,7 +54,12 @@ export default function Header(props: Props) {
             </Link>
           </>
         )}
-        {props.username && <a href="/logout">Logout</a>}
+
+        {props.username && (
+          <Link href="/logout">
+            <a>Login</a>
+          </Link>
+        )}
       </nav>
     </header>
   );

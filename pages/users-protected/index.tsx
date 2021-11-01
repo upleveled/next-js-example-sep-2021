@@ -18,18 +18,17 @@ export default function Users(props: Props) {
       </Head>
       <h2>Users List</h2>
       <ul>
-        {props.users &&
-          props.users.map((user) => {
-            return (
-              <li key={`user-li-${user.id}`}>
-                {user.name}:
-                <Link href={`/users-protected/${user.id}`}>
-                  <a>{user.name} single page</a>
-                </Link>
-                <div>{user.following ? '❤️' : '🖤'}</div>
-              </li>
-            );
-          })}
+        {props.users.map((user) => {
+          return (
+            <li key={`user-li-${user.id}`}>
+              {user.name}:
+              <Link href={`/users-protected/${user.id}`}>
+                <a>{user.name} single page</a>
+              </Link>
+              <div>{user.following ? '❤️' : '🖤'}</div>
+            </li>
+          );
+        })}
       </ul>
     </Layout>
   );

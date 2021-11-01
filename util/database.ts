@@ -189,7 +189,7 @@ export async function updateUserById(
     favoriteColor: string;
   },
 ) {
-  const users = await sql`
+  const [user] = await sql<[User | undefined]>`
     UPDATE
       users
     SET
@@ -202,11 +202,11 @@ export async function updateUserById(
       name,
       favorite_color;
   `;
-  return camelcaseKeys(users[0]);
+  return user && camelcaseKeys(user);
 }
 
 export async function deleteUserById(id: number) {
-  const users = await sql`
+  const [user] = await sql<[User | undefined]>`
     DELETE FROM
       users
     WHERE
@@ -216,7 +216,7 @@ export async function deleteUserById(id: number) {
       name,
       favorite_color;
   `;
-  return camelcaseKeys(users[0]);
+  return user && camelcaseKeys(user);
 }
 
 // Join query to get information from multiple tables
