@@ -1,3 +1,7 @@
+// DON'T COPY THIS TABLE
+// This is just for cleaning up the confusion and complexity
+// introduced by overusing the `users` table to also have
+// the username and password
 exports.up = async function up(sql) {
   await sql`
     CREATE TABLE users2 (
