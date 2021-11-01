@@ -10,13 +10,13 @@ export default function UpdateDontCopy(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { updateUserById } = await import('../../../util/database');
+  const { updateUser2ById } = await import('../../../util/database');
 
   const userIdToUpdate = context.query.userId;
   const userNewName = context.query.name;
   const userNewFavoriteColor = context.query.favoriteColor;
 
-  const updatedUser = await updateUserById(userIdToUpdate, {
+  const updatedUser = await updateUser2ById(userIdToUpdate, {
     name: userNewName,
     favoriteColor: userNewFavoriteColor,
   });

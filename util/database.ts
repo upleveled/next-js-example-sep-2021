@@ -71,6 +71,21 @@ function connectOneTimeToDatabase() {
 // Connect to PostgreSQL
 const sql = connectOneTimeToDatabase();
 
+export async function getUsers2() {
+  const users = await sql<User[]>`
+    SELECT
+      id,
+      name,
+      favorite_color
+    FROM
+      users;
+  `;
+  return users.map((user) => {
+    // Convert the snake case favorite_color to favoriteColor
+    return camelcaseKeys(user);
+  });
+}
+
 export async function getUsers() {
   const users = await sql<User[]>`
     SELECT
@@ -145,7 +160,7 @@ export async function createUser({
   name: string;
   favoriteColor: string;
 }) {
-  const users = await sql`
+  const [user] = await sql<[User | undefined]>`
     INSERT INTO users
       (name, favorite_color)
     VALUES
@@ -155,7 +170,7 @@ export async function createUser({
       name,
       favorite_color;
   `;
-  return camelcaseKeys(users[0]);
+  return user && camelcaseKeys(user);
 }
 
 export async function insertUser({
@@ -205,10 +220,50 @@ export async function updateUserById(
   return user && camelcaseKeys(user);
 }
 
+export async function updateUser2ById(
+  id: number,
+  {
+    name,
+    favoriteColor,
+  }: {
+    name: string;
+    favoriteColor: string;
+  },
+) {
+  const [user] = await sql<[User | undefined]>`
+    UPDATE
+      users2
+    SET
+      name = ${name},
+      favorite_color = ${favoriteColor}
+    WHERE
+      id = ${id}
+    RETURNING
+      id,
+      name,
+      favorite_color;
+  `;
+  return user && camelcaseKeys(user);
+}
+
 export async function deleteUserById(id: number) {
   const [user] = await sql<[User | undefined]>`
     DELETE FROM
       users
+    WHERE
+      id = ${id}
+    RETURNING
+      id,
+      name,
+      favorite_color;
+  `;
+  return user && camelcaseKeys(user);
+}
+
+export async function deleteUser2ById(id: number) {
+  const [user] = await sql<[User | undefined]>`
+    DELETE FROM
+      users2
     WHERE
       id = ${id}
     RETURNING

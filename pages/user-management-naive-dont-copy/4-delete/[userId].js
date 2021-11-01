@@ -5,9 +5,9 @@ export default function DeleteDontCopy(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { deleteUserById } = await import('../../../util/database');
+  const { deleteUser2ById } = await import('../../../util/database');
   const userIdToDelete = context.query.userId;
-  const deletedUser = await deleteUserById(userIdToDelete);
+  const deletedUser = await deleteUser2ById(userIdToDelete);
   return {
     props: {
       // deletedUser: deletedUser ? deletedUser : null,
