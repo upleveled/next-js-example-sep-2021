@@ -20,7 +20,7 @@ export default function CreateDontCopy(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { createUser } = await import('../../../util/database');
+  const { createUser2 } = await import('../../../util/database');
 
   // Early error checking
   if (!context.query.name || !context.query.favoriteColor) {
@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
     return { props: {} };
   }
 
-  const createdUser = await createUser({
+  const createdUser = await createUser2({
     name: context.query.name,
     favoriteColor: context.query.favoriteColor,
   });

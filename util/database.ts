@@ -173,6 +173,26 @@ export async function createUser({
   return user && camelcaseKeys(user);
 }
 
+export async function createUser2({
+  name,
+  favoriteColor,
+}: {
+  name: string;
+  favoriteColor: string;
+}) {
+  const [user] = await sql<[User | undefined]>`
+    INSERT INTO users2
+      (name, favorite_color)
+    VALUES
+      (${name}, ${favoriteColor})
+    RETURNING
+      id,
+      name,
+      favorite_color;
+  `;
+  return user && camelcaseKeys(user);
+}
+
 export async function insertUser({
   username,
   passwordHash,
