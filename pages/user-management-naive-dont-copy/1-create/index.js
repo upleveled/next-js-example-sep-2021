@@ -29,8 +29,8 @@ export async function getServerSideProps(context) {
   }
 
   const createdUser = await createUser({
-    username: context.query.name,
-    password: context.query.favoriteColor,
+    name: context.query.name,
+    favoriteColor: context.query.favoriteColor,
   });
 
   return {
