@@ -78,7 +78,7 @@ export async function getUsers2() {
       name,
       favorite_color
     FROM
-      users;
+      users2;
   `;
   return users.map((user) => {
     // Convert the snake case favorite_color to favoriteColor
