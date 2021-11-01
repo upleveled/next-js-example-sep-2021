@@ -29,6 +29,9 @@ export default function Header(props: Props) {
         <Link href="/about">
           <a data-cy="header-about-link">About</a>
         </Link>
+        <Link href="/about-protected">
+          <a>About (protected)</a>
+        </Link>
         <Link href="/contact">
           <a>Contact</a>
         </Link>
