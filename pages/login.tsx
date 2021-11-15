@@ -52,7 +52,7 @@ export default function LoginPage(props: { refreshUsername: () => void }) {
           const destination =
             typeof router.query.returnTo === 'string' && router.query.returnTo
               ? router.query.returnTo
-              : `/`;
+              : '/';
 
           props.refreshUsername();
 
