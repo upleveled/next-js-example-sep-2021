@@ -24,6 +24,7 @@ jobs:
         with:
           build: yarn migrate up
           start: yarn dev
+          wait-on: 'http://localhost:3000'
         # Environment variables for Ley and Next.js
         # to be able to connect to the database
         env:
