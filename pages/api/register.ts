@@ -76,7 +76,7 @@ export default async function registerHandler(
 
     const cookie = createSerializedRegisterSessionTokenCookie(newSession.token);
 
-    res.status(200).setHeader('set-Cookie', cookie).send({ user: user });
+    res.status(201).setHeader('set-Cookie', cookie).send({ user: user });
   } catch (err) {
     res.status(500).send({ errors: [{ message: (err as Error).message }] });
   }
