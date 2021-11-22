@@ -18,19 +18,19 @@ Then, connect to the built-in `postgres` database as administrator in order to c
 
 If it asks for a password, use `postgres`.
 
-```sh
+```bash
 psql -U postgres
 ```
 
 **macOS**
 
-```sh
+```bash
 psql postgres
 ```
 
 **Linux**
 
-```sh
+```bash
 sudo -u postgres psql
 ```
 
@@ -42,24 +42,43 @@ CREATE USER <user name> WITH ENCRYPTED PASSWORD '<user password>';
 GRANT ALL PRIVILEGES ON DATABASE <database name> TO <user name>;
 ```
 
-Then, to connect to the database using this new user, quit `psql` and reconnect:
+Quit `psql` using the following command:
 
-```sh
+```bash
 \q
+```
+
+On Linux, you will also need to create a Linux system user with a name matching the user name you used in the database. It will prompt you to create a password for the user - choose the same password as for the database above.
+
+```bash
+sudo adduser <user name>
+```
+
+Once you're ready to use the new user, reconnect using the following command.
+
+**Windows and macOS:**
+
+```bash
 psql -U <user name> <database name>
+```
+
+**Linux:**
+
+```bash
+sudo -u <user name> psql -U <user name> <database name>
 ```
 
 ### Running the migrations
 
 To set up the structure and the content of the database, run the migrations using Ley:
 
-```sh
+```bash
 yarn migrate up
 ```
 
 To reverse the last single migration, run:
 
-```sh
+```bash
 yarn migrate down
 ```
 
@@ -70,5 +89,5 @@ Base URL (development): http://localhost:3000/api/
 1. Reading all users: `GET /users`
 2. Reading a single user: `GET /users/:id`
 3. Creating a new user: `POST /users`
-4. Updating a user: `PUT /users/:id`
-5. Deleting a user: `DELETE /users/:id`
+4. Deleting a user: `DELETE /users/:id`
+5. Updating a user: `PUT /users/:id`
