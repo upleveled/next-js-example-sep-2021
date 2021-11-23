@@ -3,9 +3,9 @@ import Image from 'next/image';
 import Layout from '../components/Layout';
 import jace from '../public/images/jace.png';
 
-export default function About() {
+export default function About(props: { username: string | undefined }) {
   return (
-    <Layout>
+    <Layout username={props.username}>
       <Head>
         <title>about</title>
       </Head>

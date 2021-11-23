@@ -3,7 +3,7 @@ import Footer from './Footer';
 import Header from './Header';
 
 type Props = {
-  greeting?: string;
+  username?: string;
   // Only if you're using props.children
   children: ReactNode;
 };
@@ -11,7 +11,7 @@ type Props = {
 export default function Layout(props: Props) {
   return (
     <div>
-      <Header greeting={props.greeting} />
+      <Header username={props.username} />
       <main>{props.children}</main>
       <Footer />
     </div>

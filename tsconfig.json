@@ -10,15 +10,16 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "allowJs": true,
-    "jsxImportSource": "@emotion/react",
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "incremental": true
   },
   "include": [
     ".eslintrc.cjs",

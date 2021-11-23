@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       favoriteColor: body.userColor,
     });
 
-    return res.status(200).json(createdUser);
+    return res.status(201).json(createdUser);
   }
 
   return res.status(405);

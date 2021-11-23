@@ -10,12 +10,14 @@ import {
   setParsedCookie,
 } from '../../util/cookies';
 import { Course, User } from '../../util/database';
+import { Errors } from '../../util/types';
 
 type FollowingItem = { id: number; clapCount: number };
 
 type Props = {
-  user: User;
+  user?: User;
   courses: Course[];
+  errors: Errors;
 };
 
 export default function SingleUser(props: Props) {
@@ -33,12 +35,20 @@ export default function SingleUser(props: Props) {
   // const initialClapCount = following.find((cookieObj)=>cookieObj.id === props.user.id).clapCount
 
   const userCookieObject = following.find(
-    (cookieObj) => cookieObj.id === props.user.id,
+    (cookieObj) => cookieObj.id === props.user?.id,
   );
 
   const initialClapCount = userCookieObject ? userCookieObject.clapCount : 0;
 
   const [clapCount, setClapCount] = useState(initialClapCount);
+
+  if ('errors' in props) {
+    return <div>Error: {props.errors[0].message}</div>;
+  }
+
+  if (!props.user) {
+    return <div>no user passed</div>;
+  }
 
   function followClickHandler() {
     // 1. check the current state of the cookie
@@ -48,7 +58,7 @@ export default function SingleUser(props: Props) {
 
     const newCookie = addOrRemoveFromFollowingArray(
       followingArray,
-      props.user.id,
+      props.user?.id,
       () => setClapCount(0),
     );
 
@@ -63,7 +73,7 @@ export default function SingleUser(props: Props) {
     // 2. get the object in the array
     const updatedUser = findUserAndIncrementClapCount(
       currentCookie,
-      props.user.id,
+      props.user?.id,
     );
     // 3. set the new version of the array
     setParsedCookie('following', currentCookie);
@@ -81,11 +91,11 @@ export default function SingleUser(props: Props) {
       <div>his/her favourite color is {props.user.favoriteColor}</div>
 
       <button onClick={followClickHandler}>
-        {following.some((cookieObj) => props.user.id === cookieObj.id)
+        {following.some((cookieObj) => props.user?.id === cookieObj.id)
           ? 'unfollow'
           : 'follow'}
       </button>
-      {following.some((cookieObj) => props.user.id === cookieObj.id) ? (
+      {following.some((cookieObj) => props.user?.id === cookieObj.id) ? (
         <>
           <div>Clap: {clapCount}</div>
           <button onClick={clapClickHandler}>Clap me</button>
@@ -104,15 +114,41 @@ export default function SingleUser(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { getUser, getCoursesByUserId } = await import('../../util/database');
+  const { getUser, getCoursesByUserIdAndSessionToken, getUserBySessionToken } =
+    await import('../../util/database');
+
+  const sessionToken = context.req.cookies.sessionToken;
+
+  // Authorization: Allow only specific user
+  const sessionUser = await getUserBySessionToken(sessionToken);
+
+  if (!sessionUser) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/login?returnTo=${context.req.url}`,
+      },
+    };
+  }
+
+  if (sessionUser.id !== Number(context.query.userId)) {
+    return {
+      props: {
+        errors: [{ message: 'Not allowed' }],
+      },
+    };
+  }
 
   const user = await getUser(Number(context.query.userId));
-  const courses = await getCoursesByUserId(Number(context.query.userId));
+  const courses = await getCoursesByUserIdAndSessionToken(
+    Number(context.query.userId),
+    sessionToken,
+  );
   //  { id: '6', name: 'Andrea', favoriteColor: 'purple' },
 
   return {
     props: {
-      user,
+      user: user,
       courses,
     },
   };

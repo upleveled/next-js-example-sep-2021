@@ -10,9 +10,9 @@ export default function ReadDontCopy(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { getUser } = await import('../../../util/database');
+  const { getUsers2 } = await import('../../../util/database');
 
-  const user = await getUser(context.query.userId);
+  const user = await getUsers2(context.query.userId);
 
   return {
     props: {
