@@ -1,6 +1,9 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
+import setPostgresDefaultsOnHeroku from './node-heroku-postgres-env-vars';
+
+setPostgresDefaultsOnHeroku();
 
 // We don't need this anymore because
 // we're getting data from the database!
@@ -63,7 +66,6 @@ function connectOneTimeToDatabase() {
     }
     sql = globalThis.postgresSqlClient;
   }
-
   return sql;
 }
 
