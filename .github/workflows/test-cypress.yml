@@ -22,7 +22,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: yarn migrate-and-build
+          build: yarn heroku-postbuild
           start: yarn start
           wait-on: 'http://localhost:3000'
         # Environment variables for Ley and Next.js
