@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "migrate": "dotenv ley",
-    "heroku-postbuild": "yarn migrate up && yarn build"
+    "migrate-and-build": "yarn migrate up && yarn build",
+    "heroku-postbuild": "yarn migrate-and-build"
   },
   "dependencies": {
     "@emotion/babel-plugin": "^11.3.0",
